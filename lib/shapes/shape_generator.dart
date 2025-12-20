@@ -70,7 +70,7 @@ class ShapeGenerator {
     }, growable: false);
   }
 
-  static List<Vector3D> center(List<Vector3D> points) {
+  static List<Vector3D> moveToCenter(List<Vector3D> points) {
     var minX = double.infinity;
     var maxX = -double.infinity;
     var minY = double.infinity;
@@ -100,7 +100,7 @@ class ShapeGenerator {
     );
   }
 
-  static List<Vector3D> normalizeToUnit(List<Vector3D> points) {
+  static List<Vector3D> unitNormalization(List<Vector3D> points) {
     var maxAbs = 0.0;
     for (final p in points) {
       maxAbs = max(maxAbs, max(p.x.abs(), max(p.y.abs(), p.z.abs())));

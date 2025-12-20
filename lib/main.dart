@@ -49,8 +49,8 @@ class _MorphingShapesPageState extends State<MorphingShapesPage>
     final sphereSeeds = ShapeGenerator.generateSphere(dots);
     _shapePointsList.add(sphereSeeds);
     _shapePointsList.add(ShapeGenerator.generateCubeFromSphere(sphereSeeds));
-    final heart = ShapeGenerator.normalizeToUnit(
-      ShapeGenerator.center(ShapeGenerator.generateHeart(dots)),
+    final heart = ShapeGenerator.unitNormalization(
+      ShapeGenerator.moveToCenter(ShapeGenerator.generateHeart(dots)),
     );
     _shapePointsList.add(heart);
     _shapePointsList.add(ShapeGenerator.generateTorus(dots));
@@ -95,7 +95,7 @@ class _MorphingShapesPageState extends State<MorphingShapesPage>
                   final stage = MorphStage.fromIndex(
                     page,
                     _shapePointsList.length,
-                    curve: page > 1 ? Curves.easeInOut : Curves.decelerate,
+                    curve: Curves.decelerate,
                   );
 
                   return ShapeMorphViewer(

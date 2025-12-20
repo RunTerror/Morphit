@@ -45,23 +45,38 @@ These seeds are immortal. They never change. Whether the particle is part of a c
 
 Now that we have our souls, we need bodies. we "dress them up" by running their seed numbers through different 3D equations.
 
+<p align="center">
+  <img src="assets/images/sphere.png" width="22%" />
+  <img src="assets/images/cube.png" width="22%" />
+  <img src="assets/images/heart.png" width="22%" />
+  <img src="assets/images/donut.png" width="22%" />
+</p>
+
 ### 1. 🔮 The Sphere (The Spiral)
+
+
 The Sphere is our "Base Truth". We map the seeds in two elegant moves:
 *   **The Stack:** First, we map `u` to the **Y-axis**. This stacks the points in horizontal slices from bottom to top.
 *   **The Twist:** Then, we use `v` to spin the point around the **X-Z plane**.
 Because of the Golden Ratio, every point rotates *just enough* to dodge the one below it. The result is a perfect, non-repeating spiral that wraps the entire globe.
 
 ### 2. 🧊 The Cube (The Laser Trick)
+
+
 We don't build a cube; we carve it.
 Imagine standing at the exact center of the sphere and firing a laser beam through every single point. We trace that beam until it smack into the walls of a box.
 Mathematically, we take the sphere point and divide it by its largest coordinate (`max(x, y, z)`). This **"normalizes"** the sphere, snapping every curved point outward until it hits the flat surface of a cube. It’s a brutish, simple hack that preserves the beautiful distribution of the sphere.
 
 ### 3. ❤️ The Heart (The Harmonic)
+
+
 This is where math gets romantic.
 We don't use simple coordinates here; we use a **Fourier Series**.
 We stack multiple cosine waves on top of each other. Wave A sets the rhythm, Wave B creates the dip, and Wave C sharpens the point. By summing these frequencies, we force the numbers to "harmonize" into the organic curves of a heart.
 
 ### 4. 🍩 The Torus (The Loop)
+
+
 The donut is a circle chasing its own tail. We wrap the seeds into a small ring (the tube), and then we wrap *that* ring around a larger central path. It’s geometry doing a somersault.
 
 ---
