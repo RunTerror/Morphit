@@ -1,6 +1,9 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:shapes_morphing/models/rotation_axis.dart';
 import 'package:shapes_morphing/models/vector3d.dart';
+import 'package:shapes_morphing/models/view_perspective.dart';
 import 'package:shapes_morphing/shapes/morph_stage.dart';
 import 'package:shapes_morphing/shapes/shape_generator.dart';
 import 'package:shapes_morphing/widgets/shape_morph_viewer.dart';
@@ -39,6 +42,8 @@ class _MorphingShapesPageState extends State<MorphingShapesPage>
   late AnimationController _animationController;
   late List<List<Vector3D>> _shapePointsList;
   late PageController _pageController;
+  RotationAxis _currentAxis = RotationAxis.y;
+  ViewPerspective _currentPerspective = ViewPerspective.positiveZ;
 
   @override
   void initState() {
@@ -103,6 +108,8 @@ class _MorphingShapesPageState extends State<MorphingShapesPage>
                     toPoints: _shapePointsList[stage.toIndex],
                     t: stage.t,
                     rotation: _animationController.value * 2 * pi,
+                    axis: _currentAxis,
+                    perspective: _currentPerspective,
                   );
                 },
               ),
@@ -121,6 +128,125 @@ class _MorphingShapesPageState extends State<MorphingShapesPage>
               },
             ),
 
+            Positioned(
+              top: 60,
+              right: 20,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.25),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 6,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: RotationAxis.values.map((axis) {
+                            final isSelected = _currentAxis == axis;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _currentAxis = axis;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                curve: Curves.easeOut,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.white.withOpacity(0.15)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: Text(
+                                  axis.name.toUpperCase(),
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.cyanAccent
+                                        : Colors.white54,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          width: 1,
+                          height: 20,
+                          color: Colors.white.withOpacity(0.2),
+                        ),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton<ViewPerspective>(
+                            value: _currentPerspective,
+                            dropdownColor: const Color(
+                              0xFF1a1a2e,
+                            ).withOpacity(0.95),
+                            padding: const EdgeInsets.only(right: 6),
+                            icon: const Padding(
+                              padding: EdgeInsets.only(left: 4.0),
+                              child: Icon(
+                                Icons.visibility_outlined,
+                                color: Colors.cyanAccent,
+                                size: 18,
+                              ),
+                            ),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            items: ViewPerspective.values.map((perspective) {
+                              final isSelected =
+                                  _currentPerspective == perspective;
+                              return DropdownMenuItem(
+                                value: perspective,
+                                child: Text(
+                                  perspective.label,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.cyanAccent
+                                        : Colors.white70,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (ViewPerspective? newValue) {
+                              if (newValue != null) {
+                                setState(() {
+                                  _currentPerspective = newValue;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Positioned(
               bottom: 40,
               left: 0,
